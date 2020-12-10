@@ -107,6 +107,14 @@ public class Buffer {
 		write((byte)(_data ? 1 : 0));
 	}
 	
+	public void write(String _data) {
+		write((byte)_data.length());
+		for (int i = 0; i < _data.length(); ++i)
+		{
+			write((byte)_data.charAt(i));
+		}
+	}
+	
 	public void write(byte[] _data) {
 		for (byte b : _data) {
 			body[offset + index++] = b;
@@ -177,6 +185,20 @@ public class Buffer {
 	
 	public boolean readBoolean() {
 		return body[offset + index++] == (byte)1; 
+	}
+	
+	public String readString() {
+		String str = new String();
+		int len = (int)readByte();
+		for (int i = 0; i < len; ++i)
+		{
+			str += (char)readByte();
+		}
+		return str;
+	}
+	
+	public byte peekByte() {
+		return readByte(index);
 	}
 	
 	public void write(Packet packet) {
