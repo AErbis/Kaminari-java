@@ -141,8 +141,11 @@ public class Buffer {
 	}
 	
 	public short readShort(int pos) {
-		short toReturn = (short)(body[offset + pos + 1] << 8 | body[offset + pos]);
-		return toReturn;
+	    short MASK = 0xFF;
+	    int result = 0;
+	    	  result = (int)body[offset + pos] & MASK;
+	    	  result = result + (((int)body[offset + pos + 1] & MASK) << 8);
+		return (short)result;
 	}
 	
 	public int readInteger() {
@@ -154,10 +157,10 @@ public class Buffer {
 	public int readInteger(int pos) {
 	    int MASK = 0xFF;
 	    int result = 0;   
-	        result = body[offset + pos++] & MASK;
-	        result = result + ((body[offset + pos++] & MASK) << 8);
-	        result = result + ((body[offset + pos++] & MASK) << 16);
-	        result = result + ((body[offset + pos] & MASK) << 24); 
+	        result = (int)body[offset + pos++] & MASK;
+	        result = result + (((int)body[offset + pos++] & MASK) << 8);
+	        result = result + (((int)body[offset + pos++] & MASK) << 16);
+	        result = result + (((int)body[offset + pos] & MASK) << 24); 
 	    return result;
 	}
 	

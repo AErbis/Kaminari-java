@@ -14,17 +14,17 @@ import net.kaminari.IProtocol;
 import net.kaminari.IProtocolQueues;
 import net.kaminari.SuperPacket;
 
-public abstract class Client implements IBaseClient {
+public abstract class Client<PQ extends IProtocolQueues> implements IBaseClient {
 	private List<byte[]> pendingPackets;
 	private IMarshal marshal;
-	private IProtocol<IProtocolQueues> protocol;
-	private SuperPacket<IProtocolQueues> superPacket;
+	private IProtocol<PQ> protocol;
+	private SuperPacket<PQ> superPacket;
 
-	public Client(IMarshal marshal, IProtocol<IProtocolQueues> protocol, IProtocolQueues queues) {
+	public Client(IMarshal marshal, IProtocol<PQ> protocol, PQ queues) {
 		pendingPackets = Collections.synchronizedList(new ArrayList<byte[]>());
 		this.marshal = marshal;
 		this.protocol = protocol;
-		this.superPacket = new SuperPacket<IProtocolQueues>(queues);
+		this.superPacket = new SuperPacket<PQ>(queues);
 	}
 	
 	public void updateInputs() {
@@ -47,7 +47,7 @@ public abstract class Client implements IBaseClient {
 		pendingPackets.add(data);
 	}
 	
-	public IProtocolQueues getSender() {
+	public PQ getSender() {
 		return superPacket.getQueues();
 	}
 	
